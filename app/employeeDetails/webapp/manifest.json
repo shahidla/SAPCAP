@@ -1,0 +1,121 @@
+{
+  "_version": "1.8.0",
+  "sap.app": {
+    "id": "employee",
+    "type": "application",
+    "title": "Employee Details",
+    "description": "Employee Details",
+    "dataSources": {
+      "empservice": {
+        "uri": "/empservice/",
+        "type": "OData",
+        "settings": {
+          "odataVersion": "4.0"
+        }
+      }
+    }
+  },
+  "sap.ui5": {
+    "dependencies": {
+      "libs": {
+        "sap.fe": {}
+      }
+    },
+    "models": {
+      "": {
+        "dataSource": "empservice",
+        "settings": {
+          "synchronizationMode": "None",
+          "operationMode": "Server",
+          "autoExpandSelect": true,
+          "earlyRequests": true,
+          "groupProperties": {
+            "default": {
+              "submit": "Auto"
+            }
+          }
+        }
+      }
+    },
+    "routing": {
+      "routes": [
+        {
+          "pattern": ":?query:",
+          "name": "Employee",
+          "target": "Employee"
+        },
+        {
+          "pattern": "GetEmpMain({key}):?query:",
+          "name": "EmployeeDetail",
+          "target": "EmployeeDetail"
+        },
+        {
+          "pattern": "GetEmpMain({key})/item:?query:",
+          "name": "Item",
+          "target": "Item"
+        },
+        {
+          "pattern": "GetEmpMain({key})/item({key1}):?query:",
+          "name": "ItemDetail",
+          "target": "ItemDetail"
+        }
+      ],
+      "targets": {
+        "Employee": {
+          "type": "Component",
+          "id": "Employee",
+          "name": "sap.fe.templates.ListReport",
+          "options": {
+            "settings": {
+              "entitySet": "GetEmpMain",
+              "navigation": {
+                "GetEmpMain": {
+                  "detail": {
+                    "route": "EmployeeDetail"
+                  }
+                }
+              }              
+            }
+          }
+        },
+        "EmployeeDetail": {
+          "type": "Component",
+          "id": "EmployeeDetail",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "entitySet": "GetEmpMain",
+              "navigation": {
+                "item": {
+                  "detail": {
+                    "route": "Item"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Item": {
+          "type": "Component",
+          "id": "Item",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "entitySet": "GetEmpInfo"
+            }
+          }
+        },
+        "ItemDetail": {
+          "type": "Component",
+          "id": "ItemDetail",
+          "name": "sap.fe.templates.ObjectPage",
+          "options": {
+            "settings": {
+              "entitySet": "GetEmpInfo"
+            }
+          }
+        }              
+      }
+    }
+  }
+}
